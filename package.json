@@ -2,13 +2,12 @@
   "name": "event-emitter",
   "version": "0.1.0",
   "description": "EventEmitter for browser environments.",
-
   "main": "./dist/event-emitter.js",
-
   "devDependencies": {
     "del": "^1.2.0",
     "gulp": "gulpjs/gulp.git#4.0",
     "gulp-bump": "^0.3.1",
+    "gulp-coveralls": "^0.1.4",
     "gulp-eslint": "^0.12.0",
     "gulp-header": "^1.2.2",
     "gulp-rename": "^1.2.2",
@@ -25,29 +24,24 @@
     "karma-jasmine": "^0.3.5",
     "karma-safari-launcher": "^0.1.1"
   },
-
   "bugs": {
     "url": "https://github.com/r-park/event-emitter/issues"
   },
-
   "homepage": "https://github.com/r-park/event-emitter",
-
   "repository": {
     "type": "git",
     "url": "https://github.com/r-park/event-emitter.git"
   },
-
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --single-run"
+    "test": "./node_modules/karma/bin/karma start --single-run --coverage",
+    "coveralls": "gulp coveralls && rm -rf ./coverage"
   },
-
   "keywords": [
     "eventemitter",
     "event-emitter",
     "emitter",
     "events"
   ],
-
   "author": "Richard Park",
   "license": "MIT"
 }

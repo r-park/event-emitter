@@ -67,8 +67,8 @@ module.exports = function(config) {
     options.preprocessors['src/!(*.spec).js'] = 'coverage';
     options.reporters.push('coverage');
     options.coverageReporter = {
-      type : 'html',
-      dir  : 'tmp/coverage'
+      type : 'lcov',
+      dir  : 'coverage'
     }
   }
 

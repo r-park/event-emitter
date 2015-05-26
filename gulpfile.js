@@ -1,4 +1,5 @@
 var bump       = require('gulp-bump'),
+    coveralls  = require('gulp-coveralls'),
     del        = require('del'),
     eslint     = require('gulp-eslint'),
     gulp       = require('gulp'),
@@ -28,6 +29,12 @@ gulp.task('bump:minor', function(){
 
 gulp.task('clean', function(done){
   del('./dist/*', done());
+});
+
+
+gulp.task('coveralls', function() {
+  return gulp.src('./coverage/**/lcov.info')
+    .pipe(coveralls());
 });
 
 
