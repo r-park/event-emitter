@@ -9,5 +9,56 @@ An EventEmitter for browser environments.
 - IE 8 with [es5-shim](https://github.com/es-shims/es5-shim)
 - Safari
 
+## Examples
+```javascript
+var eventTypes = ['create', 'save'];
+var emitter = new EventEmitter(eventTypes);
+var scope = {listener: function(){}};
+
+// basic add
+emitter.addListener('create', function(){});
+
+// add for one iteration
+emitter.addListenerOnce('create', function(){});
+
+// add with scope for `this`
+emitter.addListenerOnce('create', scope.listener, scope);
+
+// attempt to add a listener to non-existent event type
+emitter.addListener('foo', function(){}); //=> throws Error
+
+// chaining
+emitter
+  .addListener('save', scope.listener, scope)
+  .emit('save', {status: 'success'})
+  .emit('create')
+  .removeListener('save', scope.listener)
+  .listenerCount('save'); // 0
+
+// remove all listeners for all provided event type
+emitter.removeAllListeners('save');
+
+// remove all listeners for all event types
+emitter.removeAllListeners();
+```
+
+## Develop
+Lint:
+```
+gulp lint
+```
+Execute test suites:
+```
+gulp test
+```
+With coverage:
+```
+gulp test --coverage
+```
+Build:
+```
+gulp build
+```
+
 ## License
 EventEmitter is free to use under the [open-source MIT license](https://github.com/r-park/event-emitter/blob/master/LICENSE).
