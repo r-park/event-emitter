@@ -16,9 +16,11 @@ An EventEmitter for browser environments.
 
 ## Examples
 ```javascript
+var scope = {listener: function(){}};
+
+// EventEmitter must be initialized with one or more event types
 var eventTypes = ['create', 'save'];
 var emitter = new EventEmitter(eventTypes);
-var scope = {listener: function(){}};
 
 // basic add
 emitter.addListener('create', function(){});
