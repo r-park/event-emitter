@@ -1,0 +1,415 @@
+describe("EventEmitter", function(){
+
+  var EVENT_1 = 'event1',
+      EVENT_2 = 'event2',
+      EVENT_TYPES = [EVENT_1, EVENT_2];
+
+  var emitter,
+      listener;
+
+  var noop = function(){};
+
+
+  beforeEach(function(){
+    listener = noop;
+    emitter = new EventEmitter(EVENT_TYPES);
+  });
+
+
+  describe("Constructor", function(){
+    it("should initialize the events map with provided event-type string", function(){
+      var emitter = new EventEmitter('test');
+      expect(emitter._events).toBeDefined();
+      expect(Array.isArray(emitter._events.test)).toBe(true);
+    });
+
+
+    it("should initialize the events map with provided event-types string[]", function(){
+      var emitter = new EventEmitter(['foo', 'bar']);
+      expect(emitter._events).toBeDefined();
+      expect(Array.isArray(emitter._events.foo)).toBe(true);
+      expect(Array.isArray(emitter._events.bar)).toBe(true);
+    });
+
+
+    it("should throw if event-types are not provided", function(){
+      expect(function(){
+        var emitter = new EventEmitter();
+      }).toThrow();
+    });
+
+
+    it("should throw if provided event-types are invalid", function(){
+      [null, void 0, {}, 1, true].forEach(function(value){
+        expect(function(){
+          var emitter = new EventEmitter(value);
+        }).toThrow();
+      });
+    });
+  });
+
+
+  describe("Adding a listener", function(){
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.addEventListener('foo', value);
+      }).toThrow();
+    });
+
+
+    it("should throw if listener function is not provided", function(){
+      [null, void 0, {}, [], 1, true].forEach(function(value){
+        expect(function(){
+          emitter.addListener(EVENT_1, value);
+        }).toThrow();
+      });
+    });
+
+
+    it("should throw if listener is already registered for provided event-type", function(){
+      emitter.addListener(EVENT_1, noop);
+
+      expect(function(){
+        emitter.addListener(EVENT_1, noop);
+      }).toThrow();
+
+      expect(function(){
+        emitter.addListener(EVENT_2, noop);
+      }).not.toThrow();
+    });
+
+
+    it("should add a listener object to the internal events map", function(){
+      emitter.addListener(EVENT_1, noop);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj).toBeDefined();
+      expect(listenerObj.fn).toBe(noop);
+    });
+
+
+    it("should set listener object's scope to an anonymous object literal", function(){
+      emitter.addListener(EVENT_1, noop);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj.scope).toEqual({});
+    });
+
+
+    it("should set listener object's scope to provided scope object", function(){
+      var scope = {};
+
+      emitter.addListener(EVENT_1, noop, scope);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj.scope).toBe(scope);
+    });
+
+
+    it("should return emitter", function(){
+      expect(emitter.addListener(EVENT_1, noop)).toBe(emitter);
+    });
+  });
+
+
+  describe("Adding a listener for a single call", function(){
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.addListenerOnce('foo', value);
+      }).toThrow();
+    });
+
+
+    it("should throw if listener function is not provided", function(){
+      [null, void 0, {}, [], 1, true].forEach(function(value){
+        expect(function(){
+          emitter.addListenerOnce(EVENT_1, value);
+        }).toThrow();
+      });
+    });
+
+
+    it("should add a listener object to the internal events map", function(){
+      emitter.addListenerOnce(EVENT_1, noop);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj).toBeDefined();
+      expect(typeof listenerObj.fn).toBe('function');
+    });
+
+
+    it("should set listener object's scope to an anonymous object literal", function(){
+      emitter.addListenerOnce(EVENT_1, noop);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj.scope).toEqual({});
+    });
+
+
+    it("should return emitter", function(){
+      expect(emitter.addListenerOnce(EVENT_1, noop)).toBe(emitter);
+    });
+  });
+
+
+  describe("Emitting an event", function(){
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.emit();
+      }).toThrow();
+
+      expect(function(){
+        emitter.emit('foo');
+      }).toThrow();
+    });
+
+
+    it("should invoke listener within anonymous scope", function(){
+      var obj = {
+        listener: function(){
+          this.name = 'foo';
+        }
+      };
+
+      emitter.addListener(EVENT_1, obj.listener);
+      emitter.emit(EVENT_1);
+
+      expect(obj.name).toBe(undefined);
+    });
+
+
+    it("should invoke listener within provided scope", function(){
+      var obj = {
+        listener: function(){
+          this.name = 'foo';
+        }
+      };
+
+      emitter.addListener(EVENT_1, obj.listener, obj);
+      emitter.emit(EVENT_1);
+
+      expect(obj.name).toBe('foo');
+    });
+
+
+    it("should call listener with provided data", function(){
+      var listener = jasmine.createSpy('listener');
+      var data = {};
+
+      emitter.addListener(EVENT_1, listener);
+      emitter.emit(EVENT_1, data);
+
+      expect(listener).toHaveBeenCalledWith(data);
+    });
+
+
+    it("should return emitter", function(){
+      emitter.addListener(EVENT_1, noop);
+      expect(emitter.emit(EVENT_1)).toBe(emitter);
+    });
+
+
+    it("should return emitter if no listeners are found for requested event-type", function(){
+      expect(emitter.emit(EVENT_1)).toBe(emitter);
+    });
+  });
+
+
+  describe("Emitting an event to listeners added `once`", function(){
+    it("should invoke the listener once", function(){
+      var listener = jasmine.createSpy('listener');
+
+      emitter.addListenerOnce(EVENT_1, listener);
+      emitter.emit(EVENT_1);
+
+      expect(listener.calls.count()).toBe(1);
+
+      emitter.emit(EVENT_1);
+
+      expect(listener.calls.count()).toBe(1);
+    });
+
+
+    it("should remove the listener from the internal events map after one call", function(){
+      emitter.addListenerOnce(EVENT_1, noop);
+
+      expect(emitter._events[EVENT_1].length).toBe(1);
+
+      emitter.emit(EVENT_1);
+
+      expect(emitter._events[EVENT_1].length).toBe(0);
+    });
+
+
+    it("should invoke listener within anonymous scope", function(){
+      var obj = {
+        listener: function(){
+          this.name = 'foo';
+        }
+      };
+
+      emitter.addListenerOnce(EVENT_1, obj.listener);
+      emitter.emit(EVENT_1);
+
+      expect(obj.name).toBe(undefined);
+    });
+
+
+    it("should invoke listener within provided scope", function(){
+      var obj = {
+        listener: function(){
+          this.name = 'foo';
+        }
+      };
+
+      emitter.addListenerOnce(EVENT_1, obj.listener, obj);
+      emitter.emit(EVENT_1);
+
+      expect(obj.name).toBe('foo');
+    });
+
+
+    it("should call listener with provided data", function(){
+      var listener = jasmine.createSpy('listener');
+      var data = {};
+
+      emitter.addListenerOnce(EVENT_1, listener);
+      emitter.emit(EVENT_1, data);
+
+      expect(listener).toHaveBeenCalledWith(data);
+    });
+  });
+
+
+  describe("Removing a listener", function(){
+    it("should remove listener from event-type", function(){
+      var l1 = function(){};
+      var l2 = function(){};
+      var l3 = function(){};
+
+      emitter._events[EVENT_1].push({fn: l1});
+      emitter._events[EVENT_1].push({fn: l2});
+      emitter._events[EVENT_1].push({fn: l3});
+
+      expect(emitter._events[EVENT_1].length).toBe(3);
+
+      emitter.removeListener(EVENT_1, l2);
+
+      expect(emitter._events[EVENT_1].length).toBe(2);
+      expect(emitter._events[EVENT_1][0].fn).toBe(l1);
+      expect(emitter._events[EVENT_1][1].fn).toBe(l3);
+    });
+
+
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.removeListener('foo', noop);
+      }).toThrow();
+    });
+
+
+    it("should return emitter", function(){
+      expect(emitter.removeListener(EVENT_1)).toBe(emitter);
+    });
+
+
+    it("should return emitter if provided listener is not found", function(){
+      emitter._events[EVENT_1].push({fn: noop});
+      expect(emitter.removeListener(EVENT_1, function(){})).toBe(emitter);
+    });
+  });
+
+
+  describe("Removing all listeners", function(){
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.removeAllListeners('foo');
+      }).toThrow();
+    });
+
+
+    it("should remove all listeners from provided event-type", function(){
+      emitter._events[EVENT_1].push({});
+      emitter._events[EVENT_1].push({});
+
+      expect(emitter._events[EVENT_1].length).toBe(2);
+
+      emitter.removeAllListeners(EVENT_1);
+
+      expect(emitter._events[EVENT_1].length).toBe(0);
+    });
+
+
+    it("should remove all listeners from all event-types", function(){
+      emitter._events[EVENT_1].push({});
+      emitter._events[EVENT_1].push({});
+
+      emitter._events[EVENT_2].push({});
+      emitter._events[EVENT_2].push({});
+
+      expect(emitter._events[EVENT_1].length).toBe(2);
+      expect(emitter._events[EVENT_2].length).toBe(2);
+
+      emitter.removeAllListeners();
+
+      expect(emitter._events[EVENT_1].length).toBe(0);
+      expect(emitter._events[EVENT_2].length).toBe(0);
+    });
+
+
+    it("should return emitter", function(){
+      expect(emitter.removeAllListeners(EVENT_1)).toBe(emitter);
+    });
+  });
+
+
+  describe("Retrieving listeners", function(){
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.listeners('foo');
+      }).toThrow();
+    });
+
+
+    it("should return a cloned copy of the listeners array for the requested event-type", function(){
+      emitter._events[EVENT_1].push({});
+      var listeners = emitter.listeners(EVENT_1);
+      listeners.push({});
+
+      expect(emitter._events[EVENT_1].length).toBe(1);
+      expect(listeners.length).toBe(2);
+    });
+
+
+    it("should return an empty array if there are no listeners for requested event-type", function(){
+      expect(emitter.listeners(EVENT_1).length).toBe(0);
+    });
+  });
+
+
+  describe("Retrieving the number of listeners", function(){
+    it("should throw if event-type is not found", function(){
+      expect(function(){
+        emitter.listenerCount('foo');
+      }).toThrow();
+    });
+
+
+    it("should return the number of listeners for the requested event-type", function(){
+      emitter._events[EVENT_1].push({});
+      emitter._events[EVENT_1].push({});
+
+      expect(emitter.listenerCount(EVENT_1)).toBe(2);
+
+      emitter._events[EVENT_1].pop();
+
+      expect(emitter.listenerCount(EVENT_1)).toBe(1);
+    });
+  });
+
+});

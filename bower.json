@@ -1,0 +1,35 @@
+{
+  "name": "event-emitter",
+  "version": "0.1.0",
+  "description": "EventEmitter for browser environments.",
+
+  "homepage": "https://github.com/r-park/event-emitter",
+
+  "private": true,
+
+  "ignore": [
+    "**/.*",
+    "gulpfile.js",
+    "karma.conf.js",
+    "node_modules",
+    "package.json",
+    "src",
+    "tmp"
+  ],
+
+  "keywords": [
+    "eventemitter",
+    "event-emitter",
+    "emitter",
+    "events"
+  ],
+
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+
+  "author": "Richard Park",
+  "license": "MIT"
+}
