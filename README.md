@@ -9,6 +9,11 @@ An EventEmitter for browser environments.
 - IE 8 with [es5-shim](https://github.com/es-shims/es5-shim)
 - Safari
 
+## Module Support
+- AMD
+- CommonJS
+- Browser global
+
 ## Examples
 ```javascript
 var eventTypes = ['create', 'save'];
