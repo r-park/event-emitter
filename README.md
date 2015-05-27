@@ -3,48 +3,42 @@
 # EventEmitter
 An EventEmitter for browser environments.
 
-## Browser Support
-- Chrome 
-- Firefox 
-- IE 9+ 
-- IE 8 with [es5-shim](https://github.com/es-shims/es5-shim)
-- Safari
-
-## Module Support
-- AMD
-- CommonJS
-- Browser global
-
-## Examples
+## Using EventEmitter
 ```javascript
 var scope = {listener: function(){}};
 
 // EventEmitter must be initialized with one or more event types
-var eventTypes = ['create', 'save'];
+var eventTypes = ['create', 'update', 'complete'];
 var emitter = new EventEmitter(eventTypes);
 
-// basic add
+// add a listener
 emitter.addListener('create', function(){});
 
-// add for one iteration
-emitter.addListenerOnce('create', function(){});
+// add a listener with alias `on`
+emitter.on('create', function(){});
 
-// add with scope for `this`
+// add a listener for one iteration by passing `true` as last param
+emitter.addListener('create', function(){}, true);
+
+// add a listener with scope for `this`
 emitter.addListenerOnce('create', scope.listener, scope);
 
-// attempt to add a listener to non-existent event type
+// add a listener with scope, for one iteration
+emitter.addListenerOnce('create', scope.listener, scope, true);
+
+// attempting to add a listener to non-existent event type
 emitter.addListener('foo', function(){}); //=> throws Error
 
 // chaining
 emitter
-  .addListener('save', scope.listener, scope)
-  .emit('save', {status: 'success'})
-  .emit('create')
-  .removeListener('save', scope.listener)
-  .listenerCount('save'); // 0
+  .addListener('update', scope.listener, scope)
+  .emit('update', {status: 'success'})
+  .emit('complete')
+  .removeListener('update', scope.listener)
+  .listenerCount('update');
 
-// remove all listeners for all provided event type
-emitter.removeAllListeners('save');
+// remove all listeners for provided event type
+emitter.removeAllListeners('create');
 
 // remove all listeners for all event types
 emitter.removeAllListeners();
@@ -67,6 +61,18 @@ Build:
 ```
 gulp build
 ```
+
+## Browser Support
+- Chrome 
+- Firefox 
+- IE 9+ 
+- IE 8 with [es5-shim](https://github.com/es-shims/es5-shim)
+- Safari
+
+## Module Support
+- AMD
+- CommonJS
+- Browser global
 
 ## License
 EventEmitter is free to use under the [open-source MIT license](https://github.com/r-park/event-emitter/blob/master/LICENSE).
