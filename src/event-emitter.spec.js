@@ -50,9 +50,10 @@ describe("EventEmitter", function(){
 
 
   describe("Adding a listener", function(){
+
     it("should throw if event-type is not found", function(){
       expect(function(){
-        emitter.addEventListener('foo', value);
+        emitter.addListener('foo', value);
       }).toThrow();
     });
 
@@ -79,17 +80,78 @@ describe("EventEmitter", function(){
     });
 
 
-    it("should add a listener object to the internal events map", function(){
+    it("should add a listener object to the internal events map (scenario 1)", function(){
+      // Using function signature addListener(type, listener)
       emitter.addListener(EVENT_1, noop);
 
       var listenerObj = emitter._events[EVENT_1][0];
 
       expect(listenerObj).toBeDefined();
       expect(listenerObj.fn).toBe(noop);
+      expect(listenerObj.scope).toEqual({});
     });
 
 
-    it("should set listener object's scope to an anonymous object literal", function(){
+    it("should add a listener object to the internal events map (scenario 2)", function(){
+      // Using function signature addListener(type, listener, scope)
+      var scope = {listener: function(){}};
+
+      emitter.addListener(EVENT_1, scope.listener, scope);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj).toBeDefined();
+      expect(listenerObj.fn).toBe(scope.listener);
+      expect(listenerObj.scope).toBe(scope);
+    });
+
+
+    it("should add a listener object to the internal events map (scenario 3)", function(){
+      // Using function signature addListener(type, listener, scope, once)
+      var scope = {listener: function(){}};
+
+      emitter.addListener(EVENT_1, scope.listener, scope, true);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj).toBeDefined();
+      expect(listenerObj.fn).not.toBe(scope.listener);
+      expect(typeof listenerObj.fn).toBe('function');
+      expect(listenerObj.scope).toEqual({});
+    });
+
+
+    it("should add a listener object to the internal events map (scenario 4)", function(){
+      // Using function signature addListener(type, listener, once)
+      var scope = {listener: function(){}};
+
+      emitter.addListener(EVENT_1, scope.listener, true);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj).toBeDefined();
+      expect(listenerObj.fn).not.toBe(scope.listener);
+      expect(typeof listenerObj.fn).toBe('function');
+      expect(listenerObj.scope).toEqual({});
+    });
+
+
+    it("should add a listener object to the internal events map (scenario 5)", function(){
+      // Using function signature addListener(type, listener, null, once)
+      var scope = {listener: function(){}};
+
+      emitter.addListener(EVENT_1, scope.listener, null, true);
+
+      var listenerObj = emitter._events[EVENT_1][0];
+
+      expect(listenerObj).toBeDefined();
+      expect(listenerObj.fn).not.toBe(scope.listener);
+      expect(typeof listenerObj.fn).toBe('function');
+      expect(listenerObj.scope).toEqual({});
+    });
+
+
+    it("should set listener object's scope to an anonymous object literal when scope is not provided", function(){
       emitter.addListener(EVENT_1, noop);
 
       var listenerObj = emitter._events[EVENT_1][0];
@@ -111,48 +173,6 @@ describe("EventEmitter", function(){
 
     it("should return emitter", function(){
       expect(emitter.addListener(EVENT_1, noop)).toBe(emitter);
-    });
-  });
-
-
-  describe("Adding a listener for a single call", function(){
-    it("should throw if event-type is not found", function(){
-      expect(function(){
-        emitter.addListenerOnce('foo', value);
-      }).toThrow();
-    });
-
-
-    it("should throw if listener function is not provided", function(){
-      [null, void 0, {}, [], 1, true].forEach(function(value){
-        expect(function(){
-          emitter.addListenerOnce(EVENT_1, value);
-        }).toThrow();
-      });
-    });
-
-
-    it("should add a listener object to the internal events map", function(){
-      emitter.addListenerOnce(EVENT_1, noop);
-
-      var listenerObj = emitter._events[EVENT_1][0];
-
-      expect(listenerObj).toBeDefined();
-      expect(typeof listenerObj.fn).toBe('function');
-    });
-
-
-    it("should set listener object's scope to an anonymous object literal", function(){
-      emitter.addListenerOnce(EVENT_1, noop);
-
-      var listenerObj = emitter._events[EVENT_1][0];
-
-      expect(listenerObj.scope).toEqual({});
-    });
-
-
-    it("should return emitter", function(){
-      expect(emitter.addListenerOnce(EVENT_1, noop)).toBe(emitter);
     });
   });
 
@@ -224,7 +244,7 @@ describe("EventEmitter", function(){
     it("should invoke the listener once", function(){
       var listener = jasmine.createSpy('listener');
 
-      emitter.addListenerOnce(EVENT_1, listener);
+      emitter.addListener(EVENT_1, listener, true);
       emitter.emit(EVENT_1);
 
       expect(listener.calls.count()).toBe(1);
@@ -236,7 +256,7 @@ describe("EventEmitter", function(){
 
 
     it("should remove the listener from the internal events map after one call", function(){
-      emitter.addListenerOnce(EVENT_1, noop);
+      emitter.addListener(EVENT_1, noop, true);
 
       expect(emitter._events[EVENT_1].length).toBe(1);
 
@@ -253,7 +273,7 @@ describe("EventEmitter", function(){
         }
       };
 
-      emitter.addListenerOnce(EVENT_1, obj.listener);
+      emitter.addListener(EVENT_1, obj.listener, true);
       emitter.emit(EVENT_1);
 
       expect(obj.name).toBe(undefined);
@@ -267,7 +287,7 @@ describe("EventEmitter", function(){
         }
       };
 
-      emitter.addListenerOnce(EVENT_1, obj.listener, obj);
+      emitter.addListener(EVENT_1, obj.listener, obj, true);
       emitter.emit(EVENT_1);
 
       expect(obj.name).toBe('foo');
@@ -278,7 +298,7 @@ describe("EventEmitter", function(){
       var listener = jasmine.createSpy('listener');
       var data = {};
 
-      emitter.addListenerOnce(EVENT_1, listener);
+      emitter.addListener(EVENT_1, listener, true);
       emitter.emit(EVENT_1, data);
 
       expect(listener).toHaveBeenCalledWith(data);
