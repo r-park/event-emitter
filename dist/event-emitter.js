@@ -1,4 +1,4 @@
-/* event-emitter v0.1.0 - 2015-05-26T06:20:08.988Z - https://github.com/r-park/event-emitter */
+/* event-emitter v0.2.0 - 2015-05-27T04:13:48.705Z - https://github.com/r-park/event-emitter */
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -41,10 +41,12 @@ var proto = EventEmitter.prototype;
 /**
  * @param {string} type
  * @param {Function} listener
- * @param {Object} [scope]
+ * @param {boolean|Object} [scope]
+ * @param {boolean} [once]
  * @returns {EventEmitter}
  */
-proto.addListener = function(type, listener, scope) {
+proto.on =
+proto.addListener = function(type, listener, scope, once) {
   if (typeof listener !== 'function') {
     throw new TypeError();
   }
@@ -55,35 +57,27 @@ proto.addListener = function(type, listener, scope) {
     throw new Error();
   }
 
-  listeners.push({fn: listener, scope: scope || {}});
+  if (scope === true || once === true) {
+    var that = this,
+        fired = false;
 
-  return this;
-};
-
-
-/**
- * @param {string} type
- * @param {Function} listener
- * @param {Object} [scope]
- * @returns {EventEmitter}
- */
-proto.addListenerOnce = function(type, listener, scope) {
-  if (typeof listener !== 'function') {
-    throw new TypeError();
+    listeners.push({
+      fn: function wrapper(data) {
+        that.removeListener(type, wrapper);
+        if (!fired) {
+          fired = true;
+          listener.call(scope || {}, data);
+        }
+      },
+      scope: {}
+    });
   }
-
-  var that = this,
-      fired = false;
-
-  function wrapper(data) {
-    that.removeListener(type, wrapper);
-    if (!fired) {
-      fired = true;
-      listener.call(scope || {}, data);
-    }
+  else {
+    listeners.push({
+      fn: listener,
+      scope: scope || {}
+    });
   }
-
-  this.addListener(type, wrapper);
 
   return this;
 };

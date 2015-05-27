@@ -1,12 +1,11 @@
 {
   "name": "event-emitter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "EventEmitter for browser environments.",
-
   "homepage": "https://github.com/r-park/event-emitter",
-
+  "author": "Richard Park",
+  "license": "MIT",
   "private": true,
-
   "ignore": [
     "**/.*",
     "gulpfile.js",
@@ -16,20 +15,20 @@
     "src",
     "tmp"
   ],
-
   "keywords": [
-    "eventemitter",
+    "events",
     "event-emitter",
+    "eventemitter",
     "emitter",
-    "events"
+    "messaging",
+    "observer",
+    "pub-sub",
+    "pubsub",
+    "signals"
   ],
-
   "moduleType": [
     "amd",
     "globals",
     "node"
-  ],
-
-  "author": "Richard Park",
-  "license": "MIT"
+  ]
 }
