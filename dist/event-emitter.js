@@ -1,4 +1,4 @@
-/* event-emitter v0.2.0 - 2015-05-27T04:13:48.705Z - https://github.com/r-park/event-emitter */
+/* event-emitter v0.2.1 - 2015-05-31T03:37:02.628Z - https://github.com/r-park/event-emitter */
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -129,11 +129,11 @@ proto.removeListener = function(type, listener) {
  * @returns {EventEmitter}
  */
 proto.removeAllListeners = function(type) {
-  if (type) {
+  if (typeof type === 'string') {
     var listeners = this._getListeners(type);
     listeners.length = 0;
   }
-  else {
+  else if (typeof type === 'undefined') {
     var events = this._events;
     for (var event in events) {
       events[event].length = 0;
