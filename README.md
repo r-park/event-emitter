@@ -11,40 +11,136 @@ var scope = {listener: function(){}};
 var eventTypes = ['create', 'update', 'complete'];
 var emitter = new EventEmitter(eventTypes);
 
-// add a listener
-emitter.addListener('create', function(){});
-
-// add a listener with alias `on`
-emitter.on('create', function(){});
-
-// add a listener for one iteration by passing `true` as last param
-emitter.addListener('create', function(){}, true);
-
-// add a listener with scope for `this`
-emitter.addListenerOnce('create', scope.listener, scope);
-
-// add a listener with scope, for one iteration
-emitter.addListenerOnce('create', scope.listener, scope, true);
-
-// attempting to add a listener to non-existent event type
-emitter.addListener('foo', function(){}); //=> throws Error
-
-// chaining
 emitter
   .addListener('update', scope.listener, scope)
   .emit('update', {status: 'success'})
   .emit('complete')
-  .removeListener('update', scope.listener)
-  .listenerCount('update');
+  .removeListener('update', scope.listener);
+```
 
-// remove all listeners for provided event type
-emitter.removeAllListeners('create');
+## EventEmitter(events)
+Param          | Type                 |Description
+---------------|----------------------|---------------------------------------------------
+events         | Array<br>String      | The event types that will be supported by this EventEmitter instance
 
-// remove all listeners for all event types
+```javascript
+var emitter = new EventEmitter(['create', 'update']);
+var emitter = new EventEmitter('save');
+```
+
+## addListener(type, listener)
+Add a `listener` to the event `type`. Returns self.
+
+Param          | Type          |Description
+---------------|---------------|---------------------------------------------------
+type           | String        | The event type to listen on
+listener       | Function      | The listener function
+```javascript
+emitter.addListener('created', function(){});
+
+// alternatively, use alias `on`
+emitter.on('create', function(){});
+```
+
+## addListener(type, listener, scope)
+Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function. If `scope` is not provided, `listener` will be called within an anonymous {} scope. Returns self.
+
+Param          | Type          |Description
+---------------|---------------|---------------------------------------------------
+type           | String        | The event type to listen on
+listener       | Function      | The listener function
+scope          | Object        | Optional; the scope that will be `this` inside the listener function
+```javascript
+var scope = {
+  listener: function(){}
+};
+
+emitter.addListener('created', scope.listener, scope);
+```
+
+## addListener(type, listener, once)
+Add a `listener` to the event `type`. Passing an optional `true` for `once` will automatically remove the listener after one call. Returns self.
+
+Param          | Type          | Description
+---------------|---------------|---------------------------------------------------
+type           | String        | The event type to listen on
+listener       | Function      | The listener function  
+once           | boolean       | Optional; if `true`, listener will be removed after one call
+```javascript
+emitter.addListener('created', function(){}, true);
+```
+
+## addListener(type, listener, scope, once)
+Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function, and optional `true` for `once` to automatically remove the listener after one call. Returns self.
+
+Param          | Type          | Description
+---------------|---------------|---------------------------------------------------
+type           | String        | The event type to listen on
+listener       | Function      | The listener function
+scope          | Object        | Optional; the scope that will be `this` inside the listener function
+once           | boolean       | Optional; if `true`, listener will be removed after one call
+```javascript
+var scope = {
+  listener: function(){}
+};
+
+emitter.addListener('created', scope.listener, scope, true);
+```
+
+## emit(type, data)
+Emit the event `type` to all listeners. Optionally pass `data` to listeners. Returns self.
+
+Param          | Type          | Description
+---------------|---------------|---------------------------------------------------
+type           | String        | The event type to emit
+data           |    *          | Optional data to be passed to listeners
+```javascript
+emitter.emit();
+
+// examples of passing optional data
+emitter.emit({status: 'success'});
+emitter.emit('foo');
+```
+
+## removeListener(type, listener)
+Removes `listener` from event `type` and returns self.
+
+Param          | Type          |Description
+---------------|---------------|---------------------------------------------------
+type           | String        | The event type that listener will be removed from
+listener       | Function      | The listener function to be removed
+```javascript
+var listener = function(){};
+emitter
+  .addListener('created', listener);
+  .removeListener('created', listener);
+```
+
+## removeAllListeners(type)
+Removes all registered listeners from event `type`. If `type` is `undefined`, all listeners from all event types will be removed. Returns self.
+```javascript
+// remove all listeners from event type `saved`
+emitter.removeAllListeners('saved');
+
+// remove ALL listeners from ALL event types
 emitter.removeAllListeners();
 ```
 
-## Develop
+## listeners(type)
+Returns a cloned array of registered listeners for the given event `type`.
+```javascript
+emitter.listeners('updated');
+//-> [{fn:function, scope:Object}, {fn:function, scope:Object} ..., {fn:function, scope:Object}]
+```
+
+## listenerCount(type);
+Returns the number of registered listeners for the given event `type`.
+```javascript
+emitter.listenerCount('updated')
+//-> number
+```
+
+## Development
 Lint:
 ```
 gulp lint
