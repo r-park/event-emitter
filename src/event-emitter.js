@@ -119,11 +119,11 @@ proto.removeListener = function(type, listener) {
  * @returns {EventEmitter}
  */
 proto.removeAllListeners = function(type) {
-  if (type) {
+  if (typeof type === 'string') {
     var listeners = this._getListeners(type);
     listeners.length = 0;
   }
-  else {
+  else if (typeof type === 'undefined') {
     var events = this._events;
     for (var event in events) {
       events[event].length = 0;
