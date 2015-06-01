@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/r-park/event-emitter.svg?branch=master)](https://travis-ci.org/r-park/event-emitter)
-[![Coverage Status](https://coveralls.io/repos/r-park/event-emitter/badge.svg)](https://coveralls.io/r/r-park/event-emitter)
+[![Coverage Status](https://coveralls.io/repos/r-park/event-emitter/badge.svg?branch=master)](https://coveralls.io/r/r-park/event-emitter?branch=master)
+
 # EventEmitter
 An EventEmitter for browser environments.
 
