@@ -159,19 +159,19 @@ emitter.listenerCount('updated')
 
 ## Development
 Lint:
-```
+```bash
 gulp lint
 ```
 Execute test suites:
-```
+```bash
 gulp test
 ```
 With coverage:
-```
+```bash
 gulp test --coverage
 ```
 Build:
-```
+```bash
 gulp build
 ```
 
