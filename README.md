@@ -147,7 +147,7 @@ emitter.removeAllListeners();
 Returns a cloned array of registered listeners for the given event `type`.
 ```javascript
 emitter.listeners('updated');
-//-> [{fn:function, scope:Object}, {fn:function, scope:Object} ..., {fn:function, scope:Object}]
+//-> [{fn:function, scope:Object} ..., {fn:function, scope:Object}]
 ```
 
 ## listenerCount(type);
