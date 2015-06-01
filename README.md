@@ -19,6 +19,8 @@ emitter
 ```
 
 ## EventEmitter(events)
+EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated.
+
 Param          | Type                 |Description
 ---------------|----------------------|---------------------------------------------------
 events         | Array<br>String      | The event types that will be supported by this EventEmitter instance
@@ -29,7 +31,9 @@ var emitter = new EventEmitter('save');
 ```
 
 ## addListener(type, listener)
-Add a `listener` to the event `type`. Returns self.
+Add a `listener` to the event `type`. 
+
+Returns the EventEmitter instance.
 
 Param          | Type          |Description
 ---------------|---------------|---------------------------------------------------
@@ -43,7 +47,9 @@ emitter.on('create', function(){});
 ```
 
 ## addListener(type, listener, scope)
-Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function. If `scope` is not provided, `listener` will be called within an anonymous {} scope. Returns self.
+Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function. If `scope` is not provided, `listener` will be called within an anonymous {} scope. 
+
+Returns the EventEmitter instance.
 
 Param          | Type          |Description
 ---------------|---------------|---------------------------------------------------
@@ -59,7 +65,9 @@ emitter.addListener('created', scope.listener, scope);
 ```
 
 ## addListener(type, listener, once)
-Add a `listener` to the event `type`. Passing an optional `true` for `once` will automatically remove the listener after one call. Returns self.
+Add a `listener` to the event `type`. Passing an optional `true` for `once` will automatically remove the listener after one call. 
+
+Returns the EventEmitter instance.
 
 Param          | Type          | Description
 ---------------|---------------|---------------------------------------------------
@@ -71,7 +79,9 @@ emitter.addListener('created', function(){}, true);
 ```
 
 ## addListener(type, listener, scope, once)
-Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function, and optional `true` for `once` to automatically remove the listener after one call. Returns self.
+Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function, and optional `true` for `once` to automatically remove the listener after one call. 
+
+Returns the EventEmitter instance.
 
 Param          | Type          | Description
 ---------------|---------------|---------------------------------------------------
@@ -88,7 +98,9 @@ emitter.addListener('created', scope.listener, scope, true);
 ```
 
 ## emit(type, data)
-Emit the event `type` to all listeners. Optionally pass `data` to listeners. Returns self.
+Emit the event `type` to all listeners. Optionally pass `data` to listeners. 
+
+Returns the EventEmitter instance.
 
 Param          | Type          | Description
 ---------------|---------------|---------------------------------------------------
@@ -103,7 +115,9 @@ emitter.emit('foo');
 ```
 
 ## removeListener(type, listener)
-Removes `listener` from event `type` and returns self.
+Removes `listener` from event `type`. 
+
+Returns the EventEmitter instance.
 
 Param          | Type          |Description
 ---------------|---------------|---------------------------------------------------
@@ -117,7 +131,10 @@ emitter
 ```
 
 ## removeAllListeners(type)
-Removes all registered listeners from event `type`. If `type` is `undefined`, all listeners from all event types will be removed. Returns self.
+Removes all registered listeners from event `type`. If `type` is `undefined`, all listeners from all event types will be removed. 
+
+Returns the EventEmitter instance.
+
 ```javascript
 // remove all listeners from event type `saved`
 emitter.removeAllListeners('saved');
