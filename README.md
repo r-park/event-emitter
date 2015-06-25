@@ -4,7 +4,7 @@
 # EventEmitter
 An EventEmitter for browser environments.
 
-## Using EventEmitter
+## Example
 ### Standalone
 ```javascript
 var listener = function(){};
