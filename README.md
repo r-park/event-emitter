@@ -5,12 +5,13 @@
 An EventEmitter for browser environments.
 
 ## Using EventEmitter
+### Standalone
 ```javascript
 var scope = {listener: function(){}};
 
 // EventEmitter must be initialized with one or more event types
 var eventTypes = ['create', 'update', 'complete'];
-var emitter = new EventEmitter(eventTypes);
+var emitter = eventEmitter(eventTypes);
 
 emitter
   .addListener('update', scope.listener, scope)
@@ -19,16 +20,40 @@ emitter
   .removeListener('update', scope.listener);
 ```
 
-## EventEmitter(events)
+### Extending
+```javascript
+var scope = {listener: function(){}};
+var myObj = {};
+
+// EventEmitter must be initialized with one or more event types
+var eventTypes = ['create', 'update', 'complete'];
+
+// Call `eventEmitter`, passing in the object to be extended
+eventEmitter(eventTypes, myObj);
+
+myObj
+  .addListener('update', scope.listener, scope)
+  .emit('update', {status: 'success'})
+  .emit('complete')
+  .removeListener('update', scope.listener);
+```
+
+## eventEmitter(events, [object])
 EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated.
 
 Param          | Type                 |Description
 ---------------|----------------------|---------------------------------------------------
 events         | Array<br>String      | The event types that will be supported by this EventEmitter instance
+object         | Object               | Optional object to be extended with emitter functions
 
 ```javascript
-var emitter = new EventEmitter(['create', 'update']);
-var emitter = new EventEmitter('save');
+var emitter1 = eventEmitter(['create', 'update']);
+var emitter2 = eventEmitter('save');
+
+// extending an object with emitter functions
+var myObj = {};
+eventEmitter('update', myObj);
+myObj.emit('update');
 ```
 
 ## addListener(type, listener)
