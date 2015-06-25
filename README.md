@@ -7,39 +7,37 @@ An EventEmitter for browser environments.
 ## Using EventEmitter
 ### Standalone
 ```javascript
-var scope = {listener: function(){}};
+var listener = function(){};
 
 // EventEmitter must be initialized with one or more event types
 var eventTypes = ['create', 'update', 'complete'];
 var emitter = eventEmitter(eventTypes);
 
 emitter
-  .addListener('update', scope.listener, scope)
+  .addListener('update', listener)
   .emit('update', {status: 'success'})
-  .emit('complete')
-  .removeListener('update', scope.listener);
+  .removeListener('update', listener);
 ```
 
 ### Extending
 ```javascript
-var scope = {listener: function(){}};
+var listener = function(){};
 var myObj = {};
 
 // EventEmitter must be initialized with one or more event types
-var eventTypes = ['create', 'update', 'complete'];
+var eventType = 'update';
 
-// Call `eventEmitter`, passing in the object to be extended
-eventEmitter(eventTypes, myObj);
+// Add emitter functions to `myObj`
+eventEmitter(eventType, myObj);
 
 myObj
-  .addListener('update', scope.listener, scope)
+  .addListener('update', listener)
   .emit('update', {status: 'success'})
-  .emit('complete')
-  .removeListener('update', scope.listener);
+  .removeListener('update', listener);
 ```
 
 ## eventEmitter(events, [object])
-EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated.
+EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated – attempting to do so will throw an Error.
 
 Param          | Type                 |Description
 ---------------|----------------------|---------------------------------------------------
@@ -47,6 +45,7 @@ events         | Array<br>String      | The event types that will be supported b
 object         | Object               | Optional object to be extended with emitter functions
 
 ```javascript
+// creating standalone emitters
 var emitter1 = eventEmitter(['create', 'update']);
 var emitter2 = eventEmitter('save');
 
