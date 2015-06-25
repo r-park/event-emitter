@@ -11,6 +11,8 @@ var listener = function(){};
 
 // EventEmitter must be initialized with one or more event types
 var eventTypes = ['create', 'update', 'complete'];
+
+// `eventEmitter` factory returns an EventEmitter instance
 var emitter = eventEmitter(eventTypes);
 
 emitter
