@@ -38,7 +38,7 @@ myObj
   .removeListener('update', scope.listener);
 ```
 
-## EventEmitter(events)
+## eventEmitter(events)
 EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated.
 
 Param          | Type                 |Description
