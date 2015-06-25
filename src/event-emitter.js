@@ -5,22 +5,22 @@
  * @name EventEmitter
  * @constructor
  *
- * @param {string|string[]} types
+ * @param {string|string[]} eventTypes
  *
  */
-function EventEmitter(types) {
+function EventEmitter(eventTypes) {
   var events = this._events = {};
 
-  if (typeof types === 'string') {
-    events[types] = [];
+  if (typeof eventTypes === 'string') {
+    events[eventTypes] = [];
   }
-  else if (Array.isArray(types) && types.length) {
-    for (var i = 0, l = types.length; i < l; ++i) {
-      events[types[i]] = [];
+  else if (Array.isArray(eventTypes) && eventTypes.length) {
+    for (var i = 0, l = eventTypes.length; i < l; ++i) {
+      events[eventTypes[i]] = [];
     }
   }
   else {
-    throw new TypeError();
+    throw new TypeError('EventEmitter : {string|string[]} `eventTypes` is required');
   }
 }
 
@@ -162,7 +162,7 @@ proto.listenerCount = function(type) {
 proto._getListeners = function(type) {
   var listeners = this._events[type];
   if (!listeners) {
-    throw new Error();
+    throw new Error('EventEmitter#_getListeners : event type ['+ type +'] does not exist');
   }
   return listeners;
 };
