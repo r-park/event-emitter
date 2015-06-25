@@ -89,6 +89,7 @@ var scope = {
 };
 
 emitter.addListener('created', scope.listener, scope);
+emitter.on('created', scope.listener, scope);
 ```
 
 ## addListener(type, listener, once)
@@ -103,6 +104,7 @@ listener       | Function      | The listener function
 once           | boolean       | Optional; if `true`, listener will be removed after one call
 ```javascript
 emitter.addListener('created', function(){}, true);
+emitter.on('created', function(){}, true);
 ```
 
 ## addListener(type, listener, scope, once)
@@ -122,6 +124,7 @@ var scope = {
 };
 
 emitter.addListener('created', scope.listener, scope, true);
+emitter.on('created', scope.listener, scope, true);
 ```
 
 ## emit(type, data)
