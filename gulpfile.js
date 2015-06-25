@@ -58,7 +58,7 @@ gulp.task('lint', function(){
 
 
 gulp.task('process', function(){
-  var umdHelper = function(){ return 'EventEmitter'; };
+  var umdHelper = function(){ return 'eventEmitter'; };
 
   return gulp.src('./src/event-emitter.js')
     .pipe(umd({exports: umdHelper, namespace: umdHelper}))
