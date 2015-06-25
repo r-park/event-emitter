@@ -6,11 +6,9 @@
  *
  * @param {string|string[]} eventTypes
  * @param {Object} [object]
- *
+ * @returns {Object}
  */
 function eventEmitter(eventTypes, object) { // eslint-disable-line no-unused-vars
-  var events = getEvents(eventTypes);
-
   if (object) {
     var keys = Object.keys(emitter),
         n = keys.length,
@@ -25,7 +23,7 @@ function eventEmitter(eventTypes, object) { // eslint-disable-line no-unused-var
     object = Object.create(emitter); // eslint-disable-line no-param-reassign
   }
 
-  object._events = events;
+  object._events = getEvents(eventTypes);
 
   return object;
 }
@@ -47,7 +45,7 @@ function getEvents(eventTypes) {
     }
   }
   else {
-    throw new TypeError('EventEmitter : {string|string[]} `eventTypes` is required');
+    throw new TypeError('EventEmitter : `eventTypes` is required');
   }
 
   return events;
@@ -191,7 +189,7 @@ emitter.listenerCount = function(type) {
 emitter._getListeners = function(type) {
   var listeners = this._events[type];
   if (!listeners) {
-    throw new Error('EventEmitter#_getListeners : event type `' + type + '` does not exist');
+    throw new Error('EventEmitter : event type `' + type + '` does not exist');
   }
   return listeners;
 };
