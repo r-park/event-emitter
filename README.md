@@ -5,14 +5,33 @@
 An EventEmitter for browser environments.
 
 ## Using EventEmitter
+### Standalone
 ```javascript
 var scope = {listener: function(){}};
 
 // EventEmitter must be initialized with one or more event types
 var eventTypes = ['create', 'update', 'complete'];
-var emitter = new EventEmitter(eventTypes);
+var emitter = eventEmitter(eventTypes);
 
 emitter
+  .addListener('update', scope.listener, scope)
+  .emit('update', {status: 'success'})
+  .emit('complete')
+  .removeListener('update', scope.listener);
+```
+
+### Extending
+```javascript
+var scope = {listener: function(){}};
+var myObj = {};
+
+// EventEmitter must be initialized with one or more event types
+var eventTypes = ['create', 'update', 'complete'];
+
+// Call `eventEmitter`, passing in the object to be extended
+eventEmitter(eventTypes, myObj);
+
+myObj
   .addListener('update', scope.listener, scope)
   .emit('update', {status: 'success'})
   .emit('complete')
@@ -27,8 +46,8 @@ Param          | Type                 |Description
 events         | Array<br>String      | The event types that will be supported by this EventEmitter instance
 
 ```javascript
-var emitter = new EventEmitter(['create', 'update']);
-var emitter = new EventEmitter('save');
+var emitter1 = eventEmitter(['create', 'update']);
+var emitter2 = eventEmitter('save');
 ```
 
 ## addListener(type, listener)
