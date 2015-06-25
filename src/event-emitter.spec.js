@@ -18,17 +18,15 @@ describe("EventEmitter", function(){
 
   describe("Constructor", function(){
     it("should initialize the events map with provided event-type string", function(){
-      var emitter = new EventEmitter('test');
       expect(emitter._events).toBeDefined();
-      expect(Array.isArray(emitter._events.test)).toBe(true);
+      expect(Array.isArray(emitter._events[EVENT_1])).toBe(true);
     });
 
 
     it("should initialize the events map with provided event-types string[]", function(){
-      var emitter = new EventEmitter(['foo', 'bar']);
       expect(emitter._events).toBeDefined();
-      expect(Array.isArray(emitter._events.foo)).toBe(true);
-      expect(Array.isArray(emitter._events.bar)).toBe(true);
+      expect(Array.isArray(emitter._events[EVENT_1])).toBe(true);
+      expect(Array.isArray(emitter._events[EVENT_2])).toBe(true);
     });
 
 

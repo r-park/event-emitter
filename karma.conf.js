@@ -12,7 +12,6 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      //'./dist/event-emitter.min.js',
       './src/*.js'
     ],
 
