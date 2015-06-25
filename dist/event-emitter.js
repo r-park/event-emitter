@@ -1,11 +1,11 @@
-/* event-emitter v0.3.0 - 2015-06-25T03:27:28.882Z - https://github.com/r-park/event-emitter */
+/* event-emitter v0.3.1 - 2015-06-25T03:50:09.998Z - https://github.com/r-park/event-emitter */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if (typeof exports === 'object') {
     module.exports = factory();
   } else {
-    root.EventEmitter = factory();
+    root.eventEmitter = factory();
   }
 }(this, function() {
 'use strict';
@@ -242,5 +242,5 @@ function splice(listeners, index) {
   listeners.pop();
 }
 
-return EventEmitter;
+return eventEmitter;
 }));
