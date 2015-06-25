@@ -38,16 +38,22 @@ myObj
   .removeListener('update', scope.listener);
 ```
 
-## eventEmitter(events)
+## eventEmitter(events, [object])
 EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated.
 
 Param          | Type                 |Description
 ---------------|----------------------|---------------------------------------------------
 events         | Array<br>String      | The event types that will be supported by this EventEmitter instance
+object         | Object               | Optional object to be extended with emitter functions
 
 ```javascript
 var emitter1 = eventEmitter(['create', 'update']);
 var emitter2 = eventEmitter('save');
+
+// extending an object with emitter functions
+var myObj = {};
+eventEmitter('update', myObj);
+myObj.emit('update');
 ```
 
 ## addListener(type, listener)
