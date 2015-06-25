@@ -13,7 +13,7 @@ var bump       = require('gulp-bump'),
 var manifests = ['./bower.json', './package.json'];
 
 
-gulp.task('bump', function(){
+gulp.task('bump:patch', function(){
   return gulp.src(manifests)
     .pipe(bump({type: 'patch'}))
     .pipe(gulp.dest('./'));
@@ -85,6 +85,6 @@ gulp.task('uglify', function(){
 
 gulp.task('build', gulp.series('lint', 'test', 'clean', 'process', 'uglify', 'header'));
 
-gulp.task('dist:patch', gulp.series('bump', 'build'));
+gulp.task('dist:patch', gulp.series('bump:patch', 'build'));
 
 gulp.task('dist:minor', gulp.series('bump:minor', 'build'));
