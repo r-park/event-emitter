@@ -1,4 +1,4 @@
-/* event-emitter v0.3.1 - 2015-06-25T03:50:09.998Z - https://github.com/r-park/event-emitter */
+/* event-emitter v0.3.2 - 2015-06-25T22:35:40.181Z - https://github.com/r-park/event-emitter */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -19,19 +19,7 @@
  *
  */
 function eventEmitter(eventTypes, object) { // eslint-disable-line no-unused-vars
-  var events = {};
-
-  if (typeof eventTypes === 'string') {
-    events[eventTypes] = [];
-  }
-  else if (Array.isArray(eventTypes) && eventTypes.length) {
-    for (var i = 0, l = eventTypes.length; i < l; ++i) {
-      events[eventTypes[i]] = [];
-    }
-  }
-  else {
-    throw new TypeError('EventEmitter : {string|string[]} `eventTypes` is required');
-  }
+  var events = getEvents(eventTypes);
 
   if (object) {
     var keys = Object.keys(emitter),
@@ -50,6 +38,29 @@ function eventEmitter(eventTypes, object) { // eslint-disable-line no-unused-var
   object._events = events;
 
   return object;
+}
+
+
+/**
+ * @param {string|string[]} eventTypes
+ * @returns {Object.<string,Array>}
+ */
+function getEvents(eventTypes) {
+  var events = {};
+
+  if (typeof eventTypes === 'string') {
+    events[eventTypes] = [];
+  }
+  else if (Array.isArray(eventTypes) && eventTypes.length) {
+    for (var i = 0, l = eventTypes.length; i < l; ++i) {
+      events[eventTypes[i]] = [];
+    }
+  }
+  else {
+    throw new TypeError('EventEmitter : {string|string[]} `eventTypes` is required');
+  }
+
+  return events;
 }
 
 
