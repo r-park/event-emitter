@@ -1,6 +1,6 @@
 {
   "name": "event-emitter",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "EventEmitter for browser environments.",
   "homepage": "https://github.com/r-park/event-emitter",
   "repository": "https://github.com/r-park/event-emitter.git",
