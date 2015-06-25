@@ -1,4 +1,4 @@
-describe("EventEmitter", function(){
+describe("eventEmitter", function(){
 
   var EVENT_1 = 'event1',
       EVENT_2 = 'event2',
@@ -12,11 +12,17 @@ describe("EventEmitter", function(){
 
   beforeEach(function(){
     listener = noop;
-    emitter = new EventEmitter(EVENT_TYPES);
+    emitter = eventEmitter(EVENT_TYPES);
   });
 
 
-  describe("Constructor", function(){
+  describe("Factory", function(){
+    it("should create unique instances of eventEmitter", function(){
+      var emitter2 = eventEmitter(EVENT_2);
+      expect(emitter).not.toBe(emitter2);
+    });
+
+
     it("should initialize the events map with provided event-type string", function(){
       expect(emitter._events).toBeDefined();
       expect(Array.isArray(emitter._events[EVENT_1])).toBe(true);
@@ -32,7 +38,7 @@ describe("EventEmitter", function(){
 
     it("should throw if event-types are not provided", function(){
       expect(function(){
-        var emitter = new EventEmitter();
+        eventEmitter();
       }).toThrow();
     });
 
@@ -40,8 +46,28 @@ describe("EventEmitter", function(){
     it("should throw if provided event-types are invalid", function(){
       [null, void 0, {}, 1, true].forEach(function(value){
         expect(function(){
-          var emitter = new EventEmitter(value);
+          eventEmitter(value);
         }).toThrow();
+      });
+    });
+
+
+    it("should extend object if object is provided", function(){
+      var object = {};
+
+      eventEmitter(EVENT_1, object);
+
+      [
+        'on',
+        'addListener',
+        'emit',
+        'removeListener',
+        'removeAllListeners',
+        'listeners',
+        'listenerCount',
+        '_getListeners'
+      ].forEach(function(method){
+        expect(object[method]).toBeDefined();
       });
     });
   });

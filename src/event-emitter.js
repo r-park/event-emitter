@@ -2,14 +2,14 @@
 
 
 /**
- * @name EventEmitter
- * @constructor
+ * @name eventEmitter
  *
  * @param {string|string[]} eventTypes
+ * @param {Object} [object]
  *
  */
-function EventEmitter(eventTypes) {
-  var events = this._events = {};
+function eventEmitter(eventTypes, object) {
+  var events = {};
 
   if (typeof eventTypes === 'string') {
     events[eventTypes] = [];
@@ -22,10 +22,28 @@ function EventEmitter(eventTypes) {
   else {
     throw new TypeError('EventEmitter : {string|string[]} `eventTypes` is required');
   }
+
+  if (object) {
+    var keys = Object.keys(emitter),
+        n = keys.length,
+        key;
+
+    while (n--) {
+      key = keys[n];
+      object[key] = emitter[key];
+    }
+  }
+  else {
+    object = Object.create(emitter);
+  }
+
+  object._events = events;
+
+  return object;
 }
 
 
-var proto = EventEmitter.prototype;
+var emitter = {};
 
 
 /**
@@ -33,10 +51,10 @@ var proto = EventEmitter.prototype;
  * @param {Function} listener
  * @param {boolean|Object} [scope]
  * @param {boolean} [once]
- * @returns {EventEmitter}
+ * @returns emitter
  */
-proto.on =
-proto.addListener = function(type, listener, scope, once) {
+emitter.on =
+emitter.addListener = function(type, listener, scope, once) {
   if (typeof listener !== 'function') {
     throw new TypeError();
   }
@@ -76,9 +94,9 @@ proto.addListener = function(type, listener, scope, once) {
 /**
  * @param {string} type
  * @param {*} data
- * @returns {EventEmitter}
+ * @returns emitter
  */
-proto.emit = function(type, data) {
+emitter.emit = function(type, data) {
   var listeners = this._getListeners(type);
 
   if (listeners.length) {
@@ -97,9 +115,9 @@ proto.emit = function(type, data) {
 /**
  * @param {string} type
  * @param {Function} listener
- * @returns {EventEmitter}
+ * @returns emitter
  */
-proto.removeListener = function(type, listener) {
+emitter.removeListener = function(type, listener) {
   var listeners = this._getListeners(type),
       index;
 
@@ -116,9 +134,9 @@ proto.removeListener = function(type, listener) {
 
 /**
  * @param {string} [type]
- * @returns {EventEmitter}
+ * @returns emitter
  */
-proto.removeAllListeners = function(type) {
+emitter.removeAllListeners = function(type) {
   if (typeof type === 'string') {
     var listeners = this._getListeners(type);
     listeners.length = 0;
@@ -138,7 +156,7 @@ proto.removeAllListeners = function(type) {
  * @param {string} type
  * @returns {Array}
  */
-proto.listeners = function(type) {
+emitter.listeners = function(type) {
   var listeners = this._getListeners(type);
   return listeners.length ? clone(listeners) : [];
 };
@@ -148,7 +166,7 @@ proto.listeners = function(type) {
  * @param {string} type
  * @returns {number}
  */
-proto.listenerCount = function(type) {
+emitter.listenerCount = function(type) {
   var listeners = this._getListeners(type);
   return listeners.length;
 };
@@ -159,10 +177,10 @@ proto.listenerCount = function(type) {
  * @returns {Array}
  * @throws {Error}
  */
-proto._getListeners = function(type) {
+emitter._getListeners = function(type) {
   var listeners = this._events[type];
   if (!listeners) {
-    throw new Error('EventEmitter#_getListeners : event type ['+ type +'] does not exist');
+    throw new Error('EventEmitter#_getListeners : event type `'+ type +'` does not exist');
   }
   return listeners;
 };
