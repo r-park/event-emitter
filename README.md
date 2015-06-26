@@ -58,7 +58,7 @@ myObj.emit('update');
 ```
 
 ## addListener(type, listener)
-Add a `listener` to the event `type`. 
+Add a `listener` to the event `type`.
 
 Returns the EventEmitter instance.
 
@@ -74,7 +74,7 @@ emitter.on('create', function(){});
 ```
 
 ## addListener(type, listener, scope)
-Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function. If `scope` is not provided, `listener` will be called within an anonymous {} scope. 
+Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function. If `scope` is not provided, `listener` will be called within an anonymous {} scope.
 
 Returns the EventEmitter instance.
 
@@ -93,14 +93,14 @@ emitter.on('created', scope.listener, scope);
 ```
 
 ## addListener(type, listener, once)
-Add a `listener` to the event `type`. Passing an optional `true` for `once` will automatically remove the listener after one call. 
+Add a `listener` to the event `type`. Passing an optional `true` for `once` will automatically remove the listener after one call.
 
 Returns the EventEmitter instance.
 
 Param          | Type          | Description
 ---------------|---------------|---------------------------------------------------
 type           | String        | The event type to listen on
-listener       | Function      | The listener function  
+listener       | Function      | The listener function
 once           | boolean       | Optional; if `true`, listener will be removed after one call
 ```javascript
 emitter.addListener('created', function(){}, true);
@@ -108,7 +108,7 @@ emitter.on('created', function(){}, true);
 ```
 
 ## addListener(type, listener, scope, once)
-Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function, and optional `true` for `once` to automatically remove the listener after one call. 
+Add a `listener` to the event `type`, passing an optional `scope` object that will be `this` from inside the listener function, and optional `true` for `once` to automatically remove the listener after one call.
 
 Returns the EventEmitter instance.
 
@@ -127,25 +127,25 @@ emitter.addListener('created', scope.listener, scope, true);
 emitter.on('created', scope.listener, scope, true);
 ```
 
-## emit(type, data)
-Emit the event `type` to all listeners. Optionally pass `data` to listeners. 
+## emit(type [, params...])
+Emit the event `type` to all listeners. Optionally pass `data` to listeners.
 
 Returns the EventEmitter instance.
 
 Param          | Type          | Description
 ---------------|---------------|---------------------------------------------------
 type           | String        | The event type to emit
-data           |    *          | Optional data to be passed to listeners
+params         |    *          | Optional; one or more params to be passed to listeners
 ```javascript
-emitter.emit();
+emitter.emit('saved');
 
-// examples of passing optional data
-emitter.emit({status: 'success'});
-emitter.emit('foo');
+// examples of passing optional params
+emitter.emit('saved', {status: 'success'});
+emitter.emit('saved', 123, function(){});
 ```
 
 ## removeListener(type, listener)
-Removes `listener` from event `type`. 
+Removes `listener` from event `type`.
 
 Returns the EventEmitter instance.
 
@@ -161,7 +161,7 @@ emitter
 ```
 
 ## removeAllListeners(type)
-Removes all registered listeners from event `type`. If `type` is `undefined`, all listeners from all event types will be removed. 
+Removes all registered listeners from event `type`. If `type` is `undefined`, all listeners from all event types will be removed.
 
 Returns the EventEmitter instance.
 
@@ -206,9 +206,9 @@ gulp build
 ```
 
 ## Browser Support
-- Chrome 
-- Firefox 
-- IE 9+ 
+- Chrome
+- Firefox
+- IE 9+
 - IE 8 with [es5-shim](https://github.com/es-shims/es5-shim)
 - Safari
 
