@@ -1,4 +1,4 @@
-/* event-emitter v0.4.0 - 2015-06-26T04:37:40.647Z - https://github.com/r-park/event-emitter */
+/* event-emitter v0.4.1 - 2015-06-26T05:19:07.790Z - https://github.com/r-park/event-emitter */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -112,19 +112,19 @@ emitter.addListener = function(type, listener, scope, once) {
 
 /**
  * @param {string} type
- * @param {*} data
- * @param {Function} [callback]
  * @returns emitter
  */
-emitter.emit = function(type, data, callback) {
-  var listeners = this._getListeners(type);
+emitter.emit = function(type) {
+  var listeners = this._getListeners(type),
+      params;
 
   if (listeners.length) {
+    params = toParam(arguments);
     listeners = clone(listeners);
 
     for (var i = 0, l = listeners.length, listener; i < l; ++i) {
       listener = listeners[i];
-      listener.fn.call(listener.scope, data, callback);
+      listener.fn.apply(listener.scope, params);
     }
   }
 
@@ -250,6 +250,18 @@ function splice(listeners, index) {
   }
 
   listeners.pop();
+}
+
+
+function toParam(args) {
+  var i = args.length - 1,
+      params = new Array(i);
+
+  while (i--) {
+    params[i] = args[i + 1];
+  }
+
+  return params;
 }
 
 return eventEmitter;

@@ -243,24 +243,17 @@ describe("eventEmitter", function(){
 
     it("should call listener with provided data", function(){
       var listener = sinon.spy();
-      var data = {};
+      var data1 = {};
+      var data2 = {};
 
       emitter.addListener(EVENT_1, listener);
-      emitter.emit(EVENT_1, data);
+      emitter.emit(EVENT_1, data1);
 
-      expect(listener.calledWith(data)).toBe(true);
-    });
+      expect(listener.calledWithExactly(data1)).toBe(true);
 
+      emitter.emit(EVENT_1, data1, data2);
 
-    it("should call listener with provided data and callback", function(){
-      var listener = sinon.spy();
-      var data = {};
-      var callback = noop;
-
-      emitter.addListener(EVENT_1, listener);
-      emitter.emit(EVENT_1, data, callback);
-
-      expect(listener.calledWithExactly(data, callback)).toBe(true);
+      expect(listener.calledWithExactly(data1, data2)).toBe(true);
     });
 
 
