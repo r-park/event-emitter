@@ -242,13 +242,25 @@ describe("eventEmitter", function(){
 
 
     it("should call listener with provided data", function(){
-      var listener = jasmine.createSpy('listener');
+      var listener = sinon.spy();
       var data = {};
 
       emitter.addListener(EVENT_1, listener);
       emitter.emit(EVENT_1, data);
 
-      expect(listener).toHaveBeenCalledWith(data);
+      expect(listener.calledWith(data)).toBe(true);
+    });
+
+
+    it("should call listener with provided data and callback", function(){
+      var listener = sinon.spy();
+      var data = {};
+      var callback = noop;
+
+      emitter.addListener(EVENT_1, listener);
+      emitter.emit(EVENT_1, data, callback);
+
+      expect(listener.calledWithExactly(data, callback)).toBe(true);
     });
 
 
@@ -266,16 +278,16 @@ describe("eventEmitter", function(){
 
   describe("Emitting an event to listeners added `once`", function(){
     it("should invoke the listener once", function(){
-      var listener = jasmine.createSpy('listener');
+      var listener = sinon.spy();
 
       emitter.addListener(EVENT_1, listener, true);
       emitter.emit(EVENT_1);
 
-      expect(listener.calls.count()).toBe(1);
+      expect(listener.callCount).toBe(1);
 
       emitter.emit(EVENT_1);
 
-      expect(listener.calls.count()).toBe(1);
+      expect(listener.callCount).toBe(1);
     });
 
 

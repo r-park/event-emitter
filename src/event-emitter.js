@@ -103,9 +103,10 @@ emitter.addListener = function(type, listener, scope, once) {
 /**
  * @param {string} type
  * @param {*} data
+ * @param {Function} [callback]
  * @returns emitter
  */
-emitter.emit = function(type, data) {
+emitter.emit = function(type, data, callback) {
   var listeners = this._getListeners(type);
 
   if (listeners.length) {
@@ -113,7 +114,7 @@ emitter.emit = function(type, data) {
 
     for (var i = 0, l = listeners.length, listener; i < l; ++i) {
       listener = listeners[i];
-      listener.fn.call(listener.scope, data);
+      listener.fn.call(listener.scope, data, callback);
     }
   }
 
