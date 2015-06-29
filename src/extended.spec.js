@@ -268,13 +268,15 @@ describe("EventEmitter: extended", function(){
 
 
     it("should call listener with provided data", function(){
-      var listener = jasmine.createSpy('listener');
-      var data = {};
+      var listener = sinon.spy();
+      var data1 = {};
+      var data2 = {};
 
       emitter.addListener(EVENT_1, listener, true);
-      emitter.emit(EVENT_1, data);
 
-      expect(listener).toHaveBeenCalledWith(data);
+      emitter.emit(EVENT_1, data1, data2);
+
+      expect(listener.calledWithExactly(data1, data2)).toBe(true);
     });
   });
 

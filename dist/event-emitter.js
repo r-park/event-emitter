@@ -1,4 +1,4 @@
-/* event-emitter v0.5.0 - 2015-06-29T04:57:24.515Z - https://github.com/r-park/event-emitter */
+/* event-emitter v0.5.1 - 2015-06-29T05:55:39.015Z - https://github.com/r-park/event-emitter */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
@@ -36,11 +36,11 @@ var emitter = {
           fired = false;
 
       listeners.push({
-        fn: function wrapper(data) {
+        fn: function wrapper() {
           that.removeListener(type, wrapper);
           if (!fired) {
             fired = true;
-            listener.call(scope || {}, data);
+            listener.apply(scope || {}, arguments);
           }
         },
         scope: {}

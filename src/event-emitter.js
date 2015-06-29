@@ -26,11 +26,11 @@ var emitter = {
           fired = false;
 
       listeners.push({
-        fn: function wrapper(data) {
+        fn: function wrapper() {
           that.removeListener(type, wrapper);
           if (!fired) {
             fired = true;
-            listener.call(scope || {}, data);
+            listener.apply(scope || {}, arguments);
           }
         },
         scope: {}
