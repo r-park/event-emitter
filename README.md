@@ -12,8 +12,8 @@ var listener = function(){};
 // EventEmitter must be initialized with one or more event types
 var eventTypes = ['create', 'update', 'complete'];
 
-// `eventEmitter` factory returns an EventEmitter instance
-var emitter = eventEmitter(eventTypes);
+// `Emitter` factory returns an EventEmitter instance
+var emitter = Emitter(eventTypes);
 
 emitter
   .addListener('update', listener)
@@ -30,7 +30,7 @@ var myObj = {};
 var eventType = 'update';
 
 // Add emitter functions to `myObj`
-eventEmitter(eventType, myObj);
+Emitter(eventType, myObj);
 
 myObj
   .addListener('update', listener)
@@ -38,22 +38,22 @@ myObj
   .removeListener('update', listener);
 ```
 
-## eventEmitter(events, [object])
-EventEmitter must be instantiated with one or more event types. Event types cannot be added to the EventEmitter after it has been instantiated – attempting to do so will throw an Error.
+## Emitter(eventTypes, [object])
+Factory method for creating EventEmitter instances. `Emitter` must be called with one or more `eventTypes` which will be registered to the instance. Attempting to add/remove/emit with an unregistered event type will throw an Error.
 
 Param          | Type                 |Description
 ---------------|----------------------|---------------------------------------------------
-events         | Array<br>String      | The event types that will be supported by this EventEmitter instance
+eventTypes     | Array<br>String      | The event types that will be supported by this EventEmitter instance
 object         | Object               | Optional object to be extended with emitter functions
 
 ```javascript
 // creating standalone emitters
-var emitter1 = eventEmitter(['create', 'update']);
-var emitter2 = eventEmitter('save');
+var emitter1 = Emitter(['create', 'update']);
+var emitter2 = Emitter('save');
 
 // extending an object with emitter functions
 var myObj = {};
-eventEmitter('update', myObj);
+Emitter('update', myObj);
 myObj.emit('update');
 ```
 

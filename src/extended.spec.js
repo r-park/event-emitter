@@ -1,4 +1,4 @@
-describe("eventEmitter", function(){
+describe("EventEmitter: extended", function(){
 
   var EVENT_1 = 'event1',
       EVENT_2 = 'event2',
@@ -13,7 +13,7 @@ describe("eventEmitter", function(){
   beforeEach(function(){
     listener = noop;
     emitter = {};
-    eventEmitter(EVENT_TYPES, emitter);
+    Emitter(EVENT_TYPES, emitter);
   });
 
 

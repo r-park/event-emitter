@@ -1,4 +1,4 @@
-describe("eventEmitter", function(){
+describe("EventEmitter: standalone", function(){
 
   var EVENT_1 = 'event1',
       EVENT_2 = 'event2',
@@ -12,13 +12,13 @@ describe("eventEmitter", function(){
 
   beforeEach(function(){
     listener = noop;
-    emitter = eventEmitter(EVENT_TYPES);
+    emitter = Emitter(EVENT_TYPES);
   });
 
 
   describe("Factory", function(){
     it("should create unique instances of eventEmitter", function(){
-      var emitter2 = eventEmitter(EVENT_2);
+      var emitter2 = Emitter(EVENT_2);
       expect(emitter).not.toBe(emitter2);
     });
 
@@ -55,7 +55,7 @@ describe("eventEmitter", function(){
     it("should extend object if object is provided", function(){
       var object = {};
 
-      eventEmitter(EVENT_1, object);
+      Emitter(EVENT_1, object);
 
       [
         'on',

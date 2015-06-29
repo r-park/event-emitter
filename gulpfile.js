@@ -13,16 +13,17 @@ var bump       = require('gulp-bump'),
 var manifests = ['./bower.json', './package.json'];
 
 
-gulp.task('bump:patch', function(){
-  return gulp.src(manifests)
-    .pipe(bump({type: 'patch'}))
-    .pipe(gulp.dest('./'));
-});
-
 
 gulp.task('bump:minor', function(){
   return gulp.src(manifests)
     .pipe(bump({type: 'minor'}))
+    .pipe(gulp.dest('./'));
+});
+
+
+gulp.task('bump:patch', function(){
+  return gulp.src(manifests)
+    .pipe(bump({type: 'patch'}))
     .pipe(gulp.dest('./'));
 });
 
@@ -58,10 +59,13 @@ gulp.task('lint', function(){
 
 
 gulp.task('process', function(){
-  var umdHelper = function(){ return 'eventEmitter'; };
+  var config = {
+    exports: function(){ return 'Emitter'; },
+    namespace: function(){ return 'Emitter'; }
+  };
 
   return gulp.src('./src/event-emitter.js')
-    .pipe(umd({exports: umdHelper, namespace: umdHelper}))
+    .pipe(umd(config))
     .pipe(gulp.dest('./dist'));
 });
 
