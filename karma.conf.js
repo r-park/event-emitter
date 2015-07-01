@@ -14,7 +14,7 @@ module.exports = function(config) {
     files: [
       './node_modules/sinon/pkg/sinon.js',
       './src/event-emitter.js',
-      './src/*.spec.js'
+      './test/*.spec.js'
       //'./dist/event-emitter.min.js'
     ],
 
