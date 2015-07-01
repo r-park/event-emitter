@@ -174,6 +174,8 @@ emitter.on = emitter.addListener;
 
 
 /**
+ * Factory method for creating emitter instances.
+ *
  * @param {string|string[]} eventTypes
  * @param {Object} [object]
  * @returns {Object}
