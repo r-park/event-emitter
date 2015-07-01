@@ -7,13 +7,14 @@
   "license": "MIT",
   "private": true,
   "ignore": [
+    "src",
+    "test",
+    "tmp",
     "**/.*",
     "gulpfile.js",
     "karma.conf.js",
     "node_modules",
-    "package.json",
-    "src",
-    "tmp"
+    "package.json"
   ],
   "keywords": [
     "events",
