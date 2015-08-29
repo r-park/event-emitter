@@ -2,7 +2,7 @@ module.exports = function(config) {
   var options = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    basePath: '.',
 
 
     // frameworks to use
@@ -15,7 +15,6 @@ module.exports = function(config) {
       './node_modules/sinon/pkg/sinon.js',
       './src/event-emitter.js',
       './test/*.spec.js'
-      //'./dist/event-emitter.min.js'
     ],
 
 
@@ -48,23 +47,34 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
-
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: process.env.TRAVIS ? ['Firefox'] : ['Chrome'],
+    autoWatch: true,
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    singleRun: false,
+
+
+    // custom launcher for travis-ci
+    customLaunchers: {
+      TRAVIS_CHROME: {
+        base: 'Chrome',
+        flags: ['--no-sandbox']
+      }
+    },
+
+
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: process.env.TRAVIS ? ['TRAVIS_CHROME'] : ['Chrome']
+
   };
 
 
   // additional options for coverage
   if (process.argv.indexOf('--coverage') !== -1) {
-    options.preprocessors['src/!(*.spec).js'] = 'coverage';
+    options.singleRun = true;
+    options.preprocessors['src/**/*.js'] = 'coverage';
     options.reporters.push('coverage');
     options.coverageReporter = {
       type : 'lcov',
@@ -74,4 +84,5 @@ module.exports = function(config) {
 
 
   config.set(options);
+
 };
