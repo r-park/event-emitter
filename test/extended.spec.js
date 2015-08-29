@@ -1,32 +1,30 @@
-describe("EventEmitter: extended", function(){
+describe('EventEmitter: extended', function(){
 
   var EVENT_1 = 'event1',
       EVENT_2 = 'event2',
       EVENT_TYPES = [EVENT_1, EVENT_2];
 
-  var emitter,
-      listener;
+  var emitter;
 
   var noop = function(){};
 
 
   beforeEach(function(){
-    listener = noop;
     emitter = {};
     Emitter(EVENT_TYPES, emitter);
   });
 
 
-  describe("Adding a listener", function(){
+  describe('Adding a listener', function(){
 
-    it("should throw if event-type is not found", function(){
+    it('should throw if event-type is not found', function(){
       expect(function(){
-        emitter.addListener('foo', value);
+        emitter.addListener('foo', function(){});
       }).toThrow();
     });
 
 
-    it("should throw if listener function is not provided", function(){
+    it('should throw if listener function is not provided', function(){
       [null, void 0, {}, [], 1, true].forEach(function(value){
         expect(function(){
           emitter.addListener(EVENT_1, value);
@@ -35,7 +33,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should throw if listener is already registered for provided event-type", function(){
+    it('should throw if listener is already registered for provided event-type', function(){
       emitter.addListener(EVENT_1, noop);
 
       expect(function(){
@@ -48,7 +46,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should add a listener object to the internal events map (scenario 1)", function(){
+    it('should add a listener object to the internal events map (scenario 1)', function(){
       // Using function signature addListener(type, listener)
       emitter.addListener(EVENT_1, noop);
 
@@ -60,7 +58,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should add a listener object to the internal events map (scenario 2)", function(){
+    it('should add a listener object to the internal events map (scenario 2)', function(){
       // Using function signature addListener(type, listener, scope)
       var scope = {listener: function(){}};
 
@@ -74,7 +72,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should add a listener object to the internal events map (scenario 3)", function(){
+    it('should add a listener object to the internal events map (scenario 3)', function(){
       // Using function signature addListener(type, listener, scope, once)
       var scope = {listener: function(){}};
 
@@ -89,7 +87,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should add a listener object to the internal events map (scenario 4)", function(){
+    it('should add a listener object to the internal events map (scenario 4)', function(){
       // Using function signature addListener(type, listener, once)
       var scope = {listener: function(){}};
 
@@ -104,7 +102,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should add a listener object to the internal events map (scenario 5)", function(){
+    it('should add a listener object to the internal events map (scenario 5)', function(){
       // Using function signature addListener(type, listener, null, once)
       var scope = {listener: function(){}};
 
@@ -119,7 +117,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should set listener object's scope to an anonymous object literal when scope is not provided", function(){
+    it('should set listener object scope to an anonymous object literal when scope is not provided', function(){
       emitter.addListener(EVENT_1, noop);
 
       var listenerObj = emitter._events[EVENT_1][0];
@@ -128,7 +126,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should set listener object's scope to provided scope object", function(){
+    it('should set listener object scope to provided scope object', function(){
       var scope = {};
 
       emitter.addListener(EVENT_1, noop, scope);
@@ -139,14 +137,14 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should return emitter", function(){
+    it('should return emitter', function(){
       expect(emitter.addListener(EVENT_1, noop)).toBe(emitter);
     });
   });
 
 
-  describe("Emitting an event", function(){
-    it("should throw if event-type is not found", function(){
+  describe('Emitting an event', function(){
+    it('should throw if event-type is not found', function(){
       expect(function(){
         emitter.emit();
       }).toThrow();
@@ -157,7 +155,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should invoke listener within anonymous scope", function(){
+    it('should invoke listener within anonymous scope', function(){
       var obj = {
         listener: function(){
           this.name = 'foo';
@@ -171,7 +169,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should invoke listener within provided scope", function(){
+    it('should invoke listener within provided scope', function(){
       var obj = {
         listener: function(){
           this.name = 'foo';
@@ -185,7 +183,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should call listener with provided data", function(){
+    it('should call listener with provided data', function(){
       var listener = sinon.spy();
       var data1 = {};
       var data2 = {};
@@ -201,20 +199,20 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should return emitter", function(){
+    it('should return emitter', function(){
       emitter.addListener(EVENT_1, noop);
       expect(emitter.emit(EVENT_1)).toBe(emitter);
     });
 
 
-    it("should return emitter if no listeners are found for requested event-type", function(){
+    it('should return emitter if no listeners are found for requested event-type', function(){
       expect(emitter.emit(EVENT_1)).toBe(emitter);
     });
   });
 
 
-  describe("Emitting an event to listeners added `once`", function(){
-    it("should invoke the listener once", function(){
+  describe('Emitting an event to listeners added `once`', function(){
+    it('should invoke the listener once', function(){
       var listener = sinon.spy();
 
       emitter.addListener(EVENT_1, listener, true);
@@ -228,7 +226,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should remove the listener from the internal events map after one call", function(){
+    it('should remove the listener from the internal events map after one call', function(){
       emitter.addListener(EVENT_1, noop, true);
 
       expect(emitter._events[EVENT_1].length).toBe(1);
@@ -239,7 +237,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should invoke listener within anonymous scope", function(){
+    it('should invoke listener within anonymous scope', function(){
       var obj = {
         listener: function(){
           this.name = 'foo';
@@ -253,7 +251,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should invoke listener within provided scope", function(){
+    it('should invoke listener within provided scope', function(){
       var obj = {
         listener: function(){
           this.name = 'foo';
@@ -267,7 +265,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should call listener with provided data", function(){
+    it('should call listener with provided data', function(){
       var listener = sinon.spy();
       var data1 = {};
       var data2 = {};
@@ -281,8 +279,8 @@ describe("EventEmitter: extended", function(){
   });
 
 
-  describe("Removing a listener", function(){
-    it("should remove listener from event-type", function(){
+  describe('Removing a listener', function(){
+    it('should remove listener from event-type', function(){
       var l1 = function(){};
       var l2 = function(){};
       var l3 = function(){};
@@ -301,34 +299,34 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should throw if event-type is not found", function(){
+    it('should throw if event-type is not found', function(){
       expect(function(){
         emitter.removeListener('foo', noop);
       }).toThrow();
     });
 
 
-    it("should return emitter", function(){
+    it('should return emitter', function(){
       expect(emitter.removeListener(EVENT_1)).toBe(emitter);
     });
 
 
-    it("should return emitter if provided listener is not found", function(){
+    it('should return emitter if provided listener is not found', function(){
       emitter._events[EVENT_1].push({fn: noop});
       expect(emitter.removeListener(EVENT_1, function(){})).toBe(emitter);
     });
   });
 
 
-  describe("Removing all listeners", function(){
-    it("should throw if event-type is not found", function(){
+  describe('Removing all listeners', function(){
+    it('should throw if event-type is not found', function(){
       expect(function(){
         emitter.removeAllListeners('foo');
       }).toThrow();
     });
 
 
-    it("should remove all listeners from provided event-type", function(){
+    it('should remove all listeners from provided event-type', function(){
       emitter._events[EVENT_1].push({});
       emitter._events[EVENT_1].push({});
 
@@ -340,7 +338,7 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should remove all listeners from all event-types", function(){
+    it('should remove all listeners from all event-types', function(){
       emitter._events[EVENT_1].push({});
       emitter._events[EVENT_1].push({});
 
@@ -357,21 +355,21 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should return emitter", function(){
+    it('should return emitter', function(){
       expect(emitter.removeAllListeners(EVENT_1)).toBe(emitter);
     });
   });
 
 
-  describe("Retrieving listeners", function(){
-    it("should throw if event-type is not found", function(){
+  describe('Retrieving listeners', function(){
+    it('should throw if event-type is not found', function(){
       expect(function(){
         emitter.listeners('foo');
       }).toThrow();
     });
 
 
-    it("should return a cloned copy of the listeners array for the requested event-type", function(){
+    it('should return a cloned copy of the listeners array for the requested event-type', function(){
       emitter._events[EVENT_1].push({});
       var listeners = emitter.listeners(EVENT_1);
       listeners.push({});
@@ -381,21 +379,21 @@ describe("EventEmitter: extended", function(){
     });
 
 
-    it("should return an empty array if there are no listeners for requested event-type", function(){
+    it('should return an empty array if there are no listeners for requested event-type', function(){
       expect(emitter.listeners(EVENT_1).length).toBe(0);
     });
   });
 
 
-  describe("Retrieving the number of listeners", function(){
-    it("should throw if event-type is not found", function(){
+  describe('Retrieving the number of listeners', function(){
+    it('should throw if event-type is not found', function(){
       expect(function(){
         emitter.listenerCount('foo');
       }).toThrow();
     });
 
 
-    it("should return the number of listeners for the requested event-type", function(){
+    it('should return the number of listeners for the requested event-type', function(){
       emitter._events[EVENT_1].push({});
       emitter._events[EVENT_1].push({});
 
